@@ -1,0 +1,53 @@
+/* Header/index.css */
+
+.header-container {
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 16px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff5280;
+  text-decoration: none;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-user {
+  font-size: 16px;
+  color: #333;
+}
+
+.header-logout {
+  background-color: #ff5280;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.header-logout:hover {
+  background-color: #e6436c;
+}

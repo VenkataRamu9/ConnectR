@@ -1,0 +1,85 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+}
+
+.home-heading {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #1e293b;
+}
+
+.room-list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+.room-item {
+  margin-bottom: 16px;
+}
+
+.join-room-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.join-room-button:hover {
+  background-color: #2563eb;
+}
+
+/* Home/index.css */
+
+.home-container {
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.home-heading {
+  font-size: 32px;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #333;
+}
+
+.room-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.room-item {
+  list-style: none;
+}
+
+.join-room-button {
+  background-color: #ff5280;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 82, 128, 0.2);
+}
+
+.join-room-button:hover {
+  background-color: #e6436c;
+  transform: translateY(-2px);
+}
