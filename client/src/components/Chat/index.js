@@ -6,35 +6,33 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import './index.css'
 
+let socket
+
 const Chat = () => {
   const { roomId } = useParams()
   const { user, token } = useAuth()
-
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const [typingUser, setTypingUser] = useState('')
   const messagesEndRef = useRef(null)
-  const socket = getSocket()
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   useEffect(() => {
-    if (!socket || !token || !roomId || !user?.username) return
+    if (!token || !roomId || !user?.username) return
 
-    const loadMessages = async () => {
-      try {
-        console.log('🔐 Token in Chat:', token)
-        const data = await fetchMessages(roomId, token)
-        setMessages(data)
-        scrollToBottom()
-      } catch (error) {
-        console.error('❌ Failed to load messages:', error)
-      }
-    }
+    socket = getSocket(token)
 
-    socket.emit('joinRoom', roomId)
+    // Authenticate and join room
+    socket.on('connect', () => {
+      socket.emit('authenticate', { token })
+    })
+
+    socket.on('authenticated', () => {
+      socket.emit('joinRoom', roomId)
+    })
 
     socket.on('newMessage', (message) => {
       setMessages((prev) => [...prev, message])
@@ -46,32 +44,46 @@ const Chat = () => {
       setTimeout(() => setTypingUser(''), 2000)
     })
 
+    const loadMessages = async () => {
+      try {
+        const data = await fetchMessages(roomId, token)
+        setMessages(data)
+        scrollToBottom()
+      } catch (error) {
+        console.error('❌ Failed to load messages:', error)
+      }
+    }
+
     loadMessages()
 
     return () => {
-      socket.emit('leaveRoom', roomId)
-      socket.off('newMessage')
-      socket.off('userTyping')
+      if (socket) {
+        socket.emit('leaveRoom', roomId)
+        socket.off('newMessage')
+        socket.off('userTyping')
+        socket.off('authenticated')
+      }
     }
-  }, [socket, token, roomId, user?.username])
+  }, [token, roomId, user?.username])
 
   const handleInputChange = (e) => {
     setNewMessage(e.target.value)
-    if (socket && user?.username) {
-      socket.emit('typing', { roomId, username: user.username })
+    if (socket && e.target.value.length < 3) {
+      socket.emit('typing', { roomId })
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (newMessage.trim() === '') return
+    const trimmed = newMessage.trim()
+    if (!trimmed) return
 
-    if (socket) {
-      socket.emit('sendMessage', {
-        roomId,
-        content: newMessage,
-      })
-    }
+    // Send message including user info
+    socket.emit('sendMessage', {
+      roomId,
+      content: trimmed,
+      sender: user.username,
+    })
 
     setNewMessage('')
   }
@@ -91,14 +103,10 @@ const Chat = () => {
             }`}
           >
             <strong className="sender-name">{msg.sender}:</strong>{' '}
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {msg.content}
-            </ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
           </div>
         ))}
-        {typingUser && (
-          <div className="typing-indicator styled-typing">{typingUser} is typing...</div>
-        )}
+        {typingUser && <div className="typing-indicator styled-typing">{typingUser} is typing...</div>}
         <div ref={messagesEndRef} />
       </div>
 
@@ -110,7 +118,9 @@ const Chat = () => {
           value={newMessage}
           onChange={handleInputChange}
         />
-        <button type="submit" className="send-button styled-send">Send</button>
+        <button type="submit" className="send-button styled-send">
+          Send
+        </button>
       </form>
     </div>
   )

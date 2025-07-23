@@ -1,36 +1,24 @@
-const sqlite3 = require('sqlite3').verbose()
-const db = new sqlite3.Database('./db/chat.db')
+const db = require('../db/database');
 
-const saveRoomMessage = (senderId, roomId, content) => {
-  return new Promise((resolve, reject) => {
-    const query = `
-      INSERT INTO messages (sender_id, room_id, content)
-      VALUES (?, ?, ?)
-    `
-    db.run(query, [senderId, roomId, content], function (err) {
-      if (err) return reject(err)
-      resolve({ id: this.lastID })
-    })
-  })
-}
+const saveRoomMessage = (userId, roomId, content) => {
+  const query = `INSERT INTO messages (user_id, room_id, content, created_at) VALUES (?, ?, ?, datetime('now'))`;
+  return db.run(query, [userId, roomId, content]);
+};
 
-const getRoomMessages = roomId => {
+const getRoomMessages = (roomId) => {
+  const query = `
+    SELECT messages.content, users.username AS sender, messages.created_at 
+    FROM messages 
+    JOIN users ON messages.user_id = users.id 
+    WHERE room_id = ? 
+    ORDER BY messages.created_at ASC
+  `;
   return new Promise((resolve, reject) => {
-    const query = `
-      SELECT messages.id, messages.content, messages.created_at, users.username AS sender
-      FROM messages
-      JOIN users ON messages.sender_id = users.id
-      WHERE messages.room_id = ?
-      ORDER BY messages.created_at ASC
-    `
     db.all(query, [roomId], (err, rows) => {
-      if (err) return reject(err)
-      resolve(rows)
-    })
-  })
-}
+      if (err) reject(err);
+      else resolve(rows);
+    });
+  });
+};
 
-module.exports = {
-  saveRoomMessage,
-  getRoomMessages,
-}
+module.exports = { saveRoomMessage, getRoomMessages };

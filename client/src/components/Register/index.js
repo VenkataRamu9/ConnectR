@@ -1,70 +1,42 @@
-import {useState} from 'react'
-import {useNavigate, Link} from 'react-router-dom'
-
-import {useAuth} from '../../context/AuthContext'
+import { useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
+import { registerUser, loginUser } from '../../api'
 import './index.css'
 
 const Register = () => {
-  const {login} = useAuth()
+  const { login } = useAuth()
   const navigate = useNavigate()
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
 
-  const handleSubmit = event => {
-    event.preventDefault()
-
-    if (
-      username.trim() === '' ||
-      password.trim() === '' ||
-      confirmPassword.trim() === ''
-    ) {
-      setErrorMsg('All fields are required')
-      return
-    }
-
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     if (password !== confirmPassword) {
-      setErrorMsg('Passwords do not match')
-      return
+      return setErrorMsg('Passwords do not match')
     }
-
-    // Simulate registration (replace with real API logic later)
-    login({username})
-    navigate('/')
+    try {
+      await registerUser({ username, password })
+      const loginResp = await loginUser({ username, password })
+      login(loginResp.user, loginResp.token)
+      navigate('/')
+    } catch (err) {
+      setErrorMsg(err.response?.data?.error || 'Register failed')
+    }
   }
 
   return (
     <div className="register-container">
-      <form className="register-form" onSubmit={handleSubmit}>
-        <h1 className="register-heading">Create Account</h1>
-        {errorMsg && <p className="error-text">{errorMsg}</p>}
-        <input
-          type="text"
-          className="register-input"
-          placeholder="Username"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          className="register-input"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          className="register-input"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={e => setConfirmPassword(e.target.value)}
-        />
-        <button type="submit" className="register-button">
-          Register
-        </button>
-        <p className="register-footer">
+      <form onSubmit={handleSubmit}>
+        <h1>Register</h1>
+        {errorMsg && <p>{errorMsg}</p>}
+        <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
+        <input value={password} type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+        <input value={confirmPassword} type="password" onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm Password" />
+        <button type="submit">Register</button>
+        <p>
           Already have an account? <Link to="/login">Login</Link>
         </p>
       </form>
