@@ -1,4 +1,4 @@
-console.log('🛠 Starting server...') // add this line first
+console.log('🛠 Starting server...')
 
 const express = require('express')
 const http = require('http')
@@ -6,7 +6,6 @@ const cors = require('cors')
 const { Server } = require('socket.io')
 const dotenv = require('dotenv')
 
-// if any of these throw an error, you'll know
 console.log('✅ Modules imported')
 
 const authRoutes = require('./routes/authRoutes')
@@ -30,7 +29,7 @@ app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/chat', chatRoutes)
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   console.log('🔌 New socket connection')
   handleSocket(socket, io)
 })

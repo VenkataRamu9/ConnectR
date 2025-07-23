@@ -3,140 +3,99 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f9fafb;
+  background: linear-gradient(135deg, #ffe4ec, #ffd9ec, #ffc8e2);
+  font-family: 'Poppins', sans-serif;
+  animation: fadeIn 0.5s ease-in;
 }
 
 .register-form {
-  background-color: #ffffff;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  width: 90%;
-  max-width: 400px;
-}
-
-.register-heading {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1e293b;
-  margin-bottom: 24px;
-  text-align: center;
-}
-
-.register-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 16px;
-  border: 1px solid #cbd5e0;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-.register-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #10b981;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 12px;
-}
-
-.register-button:hover {
-  background-color: #059669;
-}
-
-.register-footer {
-  text-align: center;
-  font-size: 14px;
-}
-
-.register-footer a {
-  color: #3b82f6;
-  text-decoration: none;
-}
-
-.error-text {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-/* Register/index.css */
-
-.register-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(to right, #ff758c, #ff7eb3);
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.register-form {
-  background-color: #ffffff;
+  background: rgba(255, 255, 255, 0.95);
   padding: 40px 30px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(255, 105, 135, 0.25);
   width: 100%;
   max-width: 420px;
+  transition: transform 0.3s ease;
+}
+
+.register-form:hover {
+  transform: translateY(-4px);
 }
 
 .register-heading {
   text-align: center;
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 28px;
+  color: #e91e63;
+  margin-bottom: 24px;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .register-input {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 18px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
   font-size: 16px;
-  transition: 0.3s;
+  transition: border-color 0.3s ease;
 }
 
 .register-input:focus {
-  border-color: #ff5280;
+  border-color: #e91e63;
   outline: none;
+  box-shadow: 0 0 6px rgba(233, 30, 99, 0.2);
 }
 
 .register-button {
   width: 100%;
-  padding: 12px;
-  background-color: #ff5280;
+  padding: 14px;
+  background: linear-gradient(to right, #ff416c, #ff4b2b);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 500;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s ease;
 }
 
 .register-button:hover {
-  background-color: #e6436c;
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
 }
 
 .register-footer {
   margin-top: 16px;
   text-align: center;
-  font-size: 14px;
+  font-size: 15px;
+  color: #555;
 }
 
 .register-footer a {
-  color: #ff5280;
+  color: #e91e63;
   text-decoration: none;
+  font-weight: 500;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
 }
 
 .error-text {
-  color: red;
+  color: #ff0033;
   margin-bottom: 12px;
   font-size: 14px;
   text-align: center;
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

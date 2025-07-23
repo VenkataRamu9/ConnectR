@@ -7,7 +7,7 @@ const {
   postMessage
 } = require('../controllers/chatController')
 
-const authenticate = require('../middleware/authMiddleware') // Consistent naming
+const authenticate = require('../middleware/authMiddleware')
 
 router.use(authenticate)
 

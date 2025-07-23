@@ -21,9 +21,11 @@ export const fetchRooms = async (token) => {
 }
 
 export const createRoom = async (name, token) => {
-  const res = await axios.post(`${API_BASE}/chat/rooms`, { name }, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
+  const res = await axios.post(
+    `${API_BASE}/chat/rooms`,
+    { name },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
   return res.data
 }
 
@@ -35,29 +37,31 @@ export const fetchMessages = async (roomId, token) => {
 }
 
 export const sendMessage = async (roomId, content, token) => {
-  const res = await axios.post(`${API_BASE}/chat/rooms/${roomId}/messages`, { content }, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
+  const res = await axios.post(
+    `${API_BASE}/chat/rooms/${roomId}/messages`,
+    { content },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
   return res.data
 }
 
 let socket = null
 
 export const connectSocket = (token) => {
-  socket = io('http://localhost:5000', {
-    transports: ['websocket']
-  })
+  if (!socket) {
+    socket = io('http://localhost:5000', {
+      transports: ['websocket'], // Ensures using WebSocket
+    })
 
-  socket.on('connect', () => {
-    if (token) {
+    socket.on('connect', () => {
+      console.log('✅ Socket connected')
       socket.emit('authenticate', { token })
-      console.log('✅ Socket authenticated')
-    }
-  })
+    })
 
-  socket.on('connect_error', (err) => {
-    console.error('❌ Socket connection error:', err)
-  })
+    socket.on('connect_error', (err) => {
+      console.error('❌ Socket connection error:', err.message || err)
+    })
+  }
 
   return socket
 }
